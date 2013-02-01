@@ -151,10 +151,8 @@
 
 ;;; Code:
 
-(require 'xml-rpc)
 (require 'ediff)
 (require 'thingatpt)
-(require 'browse-url)
 (require 'image-file)
 
 (defmacro confluence-coding-system-base (coding-system)
@@ -2055,16 +2053,10 @@ bullets if DEPTH is negative (does nothing if DEPTH is 0)."
 (define-derived-mode confluence-mode text-mode "Confluence"
   "Set major mode for editing Confluence Wiki pages."
   (turn-off-auto-fill)
-  (make-local-variable 'revert-buffer-function)
-  (setq revert-buffer-function 'cf-revert-page)
   ;; FIXME, should we support local backup files?
-  (make-local-variable 'make-backup-files)
-  (setq make-backup-files nil)
   (make-local-variable 'words-include-escapes)
   (setq words-include-escapes t)
-  (add-hook 'write-contents-hooks 'cf-save-page)
   ;; we set this to some nonsense so save-buffer works
-  (setq buffer-file-name (expand-file-name (concat "." (buffer-name)) "~/"))
   (set-syntax-table (make-syntax-table (syntax-table)))
   (modify-syntax-entry ?\\ "\\")
   (setq font-lock-defaults
