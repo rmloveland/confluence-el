@@ -59,10 +59,10 @@
 ;; To view the changes in your page versus what is in the wiki, type
 ;; \C-xw=, or run M-x confluence-ediff-current-page.
 ;;
-;; Also, if you want keybindings for confluence-mode, you can put the
+;; Also, if you want keybindings for confluence-markup-mode, you can put the
 ;; following in your .emacs file:
 ;;
-;; (add-hook 'confluence-mode-hook
+;; (add-hook 'confluence-markup-mode-hook
 ;;   (local-set-key "\C-xw" confluence-prefix-map)
 ;;   (local-set-key "\M-j" 'confluence-newline-and-indent)
 ;;   (local-set-key "\M-;" 'confluence-list-indent-dwim))
@@ -80,7 +80,7 @@
 ;; paragraphs of text in the Confluence markup without introducing
 ;; unwanted paragraphs.
 ;;
-;; See below for more advice on using LongLines and confluence-mode.
+;; See below for more advice on using LongLines and confluence-markup-mode.
 ;;
 ;;
 ;; EXAMPLE .emacs CONFIGURATION
@@ -105,10 +105,10 @@
 ;;   '(progn
 ;;      (require 'longlines)
 ;;      (progn
-;;        (add-hook 'confluence-mode-hook 'longlines-mode)
+;;        (add-hook 'confluence-markup-mode-hook 'longlines-mode)
 ;;        (add-hook 'confluence-before-save-hook 'longlines-before-revert-hook)
 ;;        (add-hook 'confluence-before-revert-hook 'longlines-before-revert-hook)
-;;        (add-hook 'confluence-mode-hook '(lambda () (local-set-key "\C-j" 'confluence-newline-and-indent))))))
+;;        (add-hook 'confluence-markup-mode-hook '(lambda () (local-set-key "\C-j" 'confluence-newline-and-indent))))))
 ;;
 ;; ;; LongLines mode: http://www.emacswiki.org/emacs-en/LongLines
 ;; (autoload 'longlines-mode "longlines" "LongLines Mode." t)
@@ -161,9 +161,9 @@
        (coding-system-base ,coding-system)
      ,coding-system))
 
-(defgroup confluence nil
+(defgroup confluence-markup nil
   "Support for editing confluence wikis."
-  :prefix "confluence-")
+  :prefix "confluence-markup")
 
 (defcustom confluence-url nil
   "Url of the confluence service to interact with.  This must
@@ -1021,9 +1021,9 @@ and loading the data if necessary."
   "Does the work of loading confluence page data into the current buffer.  If
 KEEP-UNDO, the current undo state will not be erased.  The LOAD-INFO is the 
 information necessary to reload the page (if nil, normal page info is used)."
-  ;; if this is an old buffer (already has confluence-mode), run
+  ;; if this is an old buffer (already has confluence-markup-mode), run
   ;; revert hooks before writing new data
-  (if (eq major-mode 'confluence-mode)
+  (if (eq major-mode 'confluence-markup-mode)
       (run-hooks 'confluence-before-revert-hook))
   (let ((old-point (point))
         (was-read-only buffer-read-only))
@@ -1053,7 +1053,7 @@ information necessary to reload the page (if nil, normal page info is used)."
     (or keep-undo
         (eq buffer-undo-list t)
         (setq buffer-undo-list nil))
-    (confluence-mode)
+    (confluence-markup-mode)
     (if was-read-only
         (toggle-read-only 1))))
 
@@ -2050,7 +2050,7 @@ bullets if DEPTH is negative (does nothing if DEPTH is 0)."
         (delete-region tmp-point (point))
         (insert-before-markers indent-str))))))
 
-(define-derived-mode confluence-mode text-mode "Confluence"
+(define-derived-mode confluence-markup-mode text-mode "Confluence Markup"
   "Set major mode for editing Confluence Wiki pages."
   (turn-off-auto-fill)
   ;; FIXME, should we support local backup files?
@@ -2077,5 +2077,5 @@ bullets if DEPTH is negative (does nothing if DEPTH is 0)."
 ;;   - labelText:<label>
 ;;   - title:<title> -- completion
 
-(provide 'confluence)
-;;; confluence.el ends here
+(provide 'confluence-markup)
+;;; confluence-markup.el ends here
