@@ -1,12 +1,11 @@
 ;;; confluence-markup.el --- Emacs mode for highlighting Confluence markup.
 
-;; Copyright (C) 2013, 2014 Rich Loveland
 ;; Copyright (C) 2008  Free Software Foundation, Inc.
+;; Copyright (C) 2013, 2014 Richard Loveland <r@rmloveland.com>
 
-;; Author: Richard Loveland <r@rmloveland.com>
 ;; Author: James Ahlborn
 ;; Author: Kyle Burton <kyle.burton@gmail.com>
-;; Keywords: confluence, wiki, markup
+;; Keywords: Confluence, Wiki, Wikis, WikiText, Markup
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -25,36 +24,37 @@
 
 ;;; Commentary:
 
-;; This file began its life as confluence.el.  It's now a simple
-;; syntax highlighter for Confluence wiki markup.  All network-facing
+;; This file began its life as 'confluence.el', a full-featured
+;; package with the ability to edit Confluence wiki pages over the
+;; network.  It's now a simple syntax highlighter.  All network-facing
 ;; functionality has been removed.
 
 ;;; Code:
 
 (defgroup confluence-markup nil
-  "Support for editing confluence wikis."
-  :prefix "confluence-markup")
+  "Highlighter for text files using Confluence wiki syntax."
+  :prefix "confluence-markup"
+  :group 'wp)
 
-(defvar confluence-code-face 'confluence-code-face)
+(defvar confluence-markup-code-face 'confluence-markup-code-face)
 
-(defface confluence-code-face
+(defface confluence-markup-code-face
   '((((class color) (background dark))
      (:foreground "dim gray" :bold t))
     (((class color) (background light))
      (:foreground "dim gray"))
     (t (:bold t)))
-  "Font Lock Mode face used for code in confluence pages.")
+  "Font Lock Mode face used for code in Confluence wiki syntax.")
 
-(defvar confluence-panel-face 'confluence-panel-face)
+(defvar confluence-markup-panel-face 'confluence-markup-panel-face)
 
-(defface confluence-panel-face
+(defface confluence-markup-panel-face
   '((((class color) (background dark))
      (:background "LightGray"))
     (((class color) (background light))
      (:background "LightGray"))
     (t nil))
-  "Font Lock Mode face used for panel in confluence pages.")
-
+  "Font Lock Mode face used for panel in Confluence wiki syntax.")
 
 (defconst confluence-markup-font-lock-keywords-1
   (list
@@ -80,7 +80,7 @@
    
    ;; code
    '("{{\\([^}\n]+\\)}}"
-     (1 'confluence-code-face t))
+     (1 'confluence-markup-code-face t))
    
    ;; italics/emphasised
    '("[^[:word:]\\]_\\([^_\n]+\\)_\\W"
@@ -148,20 +148,20 @@
   
            ;; code/preformatted blocks
            '("{noformat\\(?:[:][^}\n]*\\)?}\\(\\(.\\|[\n]\\)*?\\){noformat}"
-             (1 'confluence-code-face t))
+             (1 'confluence-markup-code-face t))
            '("{code\\(?:[:][^}\n]*\\)?}\\(\\(.\\|[\n]\\)*?\\){code}"
-             (1 'confluence-code-face t))
+             (1 'confluence-markup-code-face t))
 
            ;; panels
            '("{panel\\(?:[:][^}\n]*\\)?}\\(?:\\s-*[\r]?[\n]\\)?\\(\\(.\\|[\n]\\)*?\\){panel}"
-             (1 'confluence-panel-face append))
+             (1 'confluence-markup-panel-face append))
            ))
   "Gaudy level highlighting for confluence mode.")
 
-(defvar confluence-font-lock-keywords confluence-markup-font-lock-keywords-1
+(defvar confluence-markup-font-lock-keywords confluence-markup-font-lock-keywords-1
   "Default expressions to highlight in Confluence modes.")
 
-(defun confluence-newline-and-indent ()
+(defun confluence-markup-newline-and-indent ()
   "Inserts a newline and indents using the previous indentation.
 Supports lists, tables, and headers."
   (interactive)
@@ -182,7 +182,7 @@ Supports lists, tables, and headers."
     (if indentation
         (insert indentation))))
 
-(defun confluence-list-indent-dwim (&optional arg)
+(defun confluence-markup-list-indent-dwim (&optional arg)
   "Increases the list indentationn on the current line by 1 bullet.  With ARG decreases by 1 bullet."
   (interactive "P")
   (let ((indent-arg (if arg -1 1)))
@@ -195,16 +195,16 @@ Supports lists, tables, and headers."
             (if (bolp)
                 (forward-line -1))
             (setq tmp-point (line-beginning-position))
-            (confluence-modify-list-indent indent-arg)
+            (confluence-markup-modify-list-indent indent-arg)
             (while (and (forward-line -1)
                         (not (equal (line-beginning-position) tmp-point))
                         (>= (line-end-position) beg))
               (setq tmp-point (line-beginning-position))
-              (confluence-modify-list-indent indent-arg))
+              (confluence-markup-modify-list-indent indent-arg))
           ))
-    (confluence-modify-list-indent indent-arg))))
+    (confluence-markup-modify-list-indent indent-arg))))
 
-(defun confluence-modify-list-indent (depth)
+(defun confluence-markup-modify-list-indent (depth)
   "Updates the list indentation on the current line, adding DEPTH bullets if DEPTH is positive or removing DEPTH
 bullets if DEPTH is negative (does nothing if DEPTH is 0)."
   (interactive "nList Depth Change: ")
