@@ -1,7 +1,7 @@
 ;;; confluence-markup.el --- Emacs mode for highlighting Confluence markup.
 
 ;; Copyright (C) 2008  Free Software Foundation, Inc.
-;; Copyright (C) 2013, 2014 Richard Loveland <r@rmloveland.com>
+;; Copyright (C) 2013, 2014, 2015, 2016 Richard Loveland <r@rmloveland.com>
 
 ;; Author: James Ahlborn
 ;; Author: Kyle Burton <kyle.burton@gmail.com>
