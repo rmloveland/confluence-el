@@ -106,8 +106,16 @@
    '("^h[4-9][.] \\(.*\\)$"
      (1 'underline prepend))
 
+   ;; ** outline headers
+
+   ;; Generic, matches all headers
+   '("^[\*]+ \\(.*\\)$"
+	 (0 '(:height 1.0 :overline "#A7A7A7" :foreground "#005522" :background "#E5F4FB")
+		nil
+		t))
+
    ;; bullet points
-   '("^\\([*#]+\\)\\s-"
+   '("^\\([\+#]+\\)\\s-"
      (1 'font-lock-constant-face))
    
    ;; links
