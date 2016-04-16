@@ -242,12 +242,11 @@ bullets if DEPTH is negative (does nothing if DEPTH is 0)."
   (turn-off-auto-fill)
   (make-local-variable 'words-include-escapes)
   (setq words-include-escapes t)
-  ;; We set this to some nonsense so SAVE-BUFFER works.
-  (set-syntax-table (make-syntax-table (syntax-table)))
   (modify-syntax-entry ?\\ "\\")
-  (setq font-lock-defaults
-        '((confluence-markup-font-lock-keywords confluence-markup-font-lock-keywords-1
-						confluence-markup-font-lock-keywords-2)
+  (set (make-local-variable 'font-lock-defaults)
+	   '((confluence-markup-font-lock-keywords
+		  confluence-markup-font-lock-keywords-1
+		  confluence-markup-font-lock-keywords-2)
           nil nil nil nil (font-lock-multiline . t))))
 
 (provide 'confluence-markup)
